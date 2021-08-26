@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatOptionSelectionChange } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -9,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class StudentService {
 
   baseUrl = environment.baseUrl;
-  
+
   constructor(private http: HttpClient) { }
 
   public Create(ob): Observable<any> {
@@ -64,6 +65,26 @@ export class StudentService {
   }
 
 
+
+uploadImage(regId,uploadImageData): Observable<any> {
+  return this.http.post(this.baseUrl + 'api/studentImage/' + regId + '/upload', uploadImageData);
+}
+
+updateImage(regId,uploadImageData): Observable<any> {
+  return this.http.put(this.baseUrl + 'api/studentImage/' + regId + '/update', uploadImageData);
+}
+
+deleteImage(regId): Observable<any> {
+  return this.http.delete(this.baseUrl + 'api/studentImage/' + regId + '/delete');
+}
+
+
+studentGetImage(regId): Observable<any> {
+  let options = { headers: new HttpHeaders().set('Content-Type', 'multipart/form-data') };
+  return this.http.get(this.baseUrl + 'api/studentImage/get/' + regId ,options);
+}
+
+ 
 }
 
 /*

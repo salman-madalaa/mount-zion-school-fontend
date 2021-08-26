@@ -1,52 +1,53 @@
 <h2 mat-dialog-title style="text-align: center;">New Student</h2>
 
-<!-- fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px" -->
 <form [formGroup]="student" autocomplete="off">
 
   <mat-dialog-content class="mat-typography">
 
     <mat-tab-group>
       <mat-tab label="Basic Details:">
-        <br>
-        <table class="example-full-width" cellspacing="0">
 
-          <tr>
-            <td>
-              <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label> SamagraId </mat-label>
-                <input matInput type="number"  formControlName="samagraId" id="SamagraId">
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label> DateOfBirth </mat-label>
-                <input matInput type="date" formControlName="dateOfBirth" id="dateOfBirth"
-                  required>
-              </mat-form-field>
+        <mat-grid-list cols="4" rowHeight="100px">
 
-            </td>
-          </tr>
+          <mat-grid-tile [colspan]="3" [rowspan]="1">
+            <div class="col-md-4">
 
-
-          <tr>
-            <td>
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> FirstName </mat-label>
                 <input matInput type="text" formControlName="firstName" id="firstName" required>
               </mat-form-field>
-            </td>
-            <td>
+
+            </div>
+            <div class="col-md-4">
+
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> LastName </mat-label>
                 <input matInput type="text" formControlName="lastName" id="lastName" required>
               </mat-form-field>
-            </td>
-          </tr>
 
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label> DateOfBirth </mat-label>
+                <input matInput formControlName="dateOfBirth" id="dateOfBirth"  [matDatepicker]="picker" required readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
 
+          <mat-grid-tile [colspan]="1" [rowspan]="2">
 
-          <tr>
-            <td>
+            <div class="thumbnail-container">
+              <img *ngIf="imageSrc != null" [src]="imageSrc" (click)="imageFile.click()" placeholder="click here to upload imag" style="height: 180px; width:150px" required>
+              <img *ngIf="imageSrc == null" src="../assets/addImage.png" (click)="imageFile.click()" placeholder="click here to upload imag" style="height: 180px; width:150px" required>
+            </div>
+            <input type="file" style="display: none" accept="image/*" (change)="onFileChange($event)" #imageFile>
+
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="3" [rowspan]="1">
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>FatherMotherExpired</mat-label>
                 <mat-select formControlName="fatherMotherExpired" required>
@@ -54,38 +55,29 @@
                   <mat-option value="false" (click)="fatherMotherExpired(false)">No</mat-option>
                 </mat-select>
               </mat-form-field>
-              <!-- <label>FatherMotherExpired  <span aria-hidden="true" class="required">*</span> : </label>&nbsp;
-              <mat-radio-group formControlName="fatherMotherExpired" required aria-label="Select an option">
-                <mat-radio-button value="true" (click)="fatherMotherExpired(true)">Yes</mat-radio-button> &nbsp;&nbsp;
-                <mat-radio-button value="false" (click)="fatherMotherExpired(false)">No</mat-radio-button>
-              </mat-radio-group> -->
+            </div>
 
-            </td>
-            <td>
-              <mat-form-field class="example-full-width" appearance="fill" *ngIf="FMExpired == false">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width" appearance="fill" >
                 <mat-label> FatherName </mat-label>
-                <input matInput type="text" formControlName="fatherName" id="fatherName" [required]="FMExpired == false">
+                <input matInput type="text" formControlName="fatherName" id="fatherName" [readonly]="FMExpired"
+                  [required]="FMExpired == false">
               </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="example-full-width" appearance="fill" *ngIf="FMExpired == false">
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width" appearance="fill" >
                 <mat-label> MotherName </mat-label>
-                <input matInput type="text" formControlName="motherName" id="motherName" [required]="FMExpired == false">
+                <input matInput type="text" formControlName="motherName" id="motherName" [readonly]="FMExpired"
+                  [required]="FMExpired == false">
               </mat-form-field>
-            </td>
-          </tr>
+            </div>
 
+          </mat-grid-tile>
 
+          <mat-grid-tile [colspan]="4" [rowspan]="1">
 
-          <tr>
-            <td>
-              <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label>MobileNumber</mat-label>
-                <span matPrefix>+91 &nbsp;</span>
-                <input matInput type="number" formControlName="mobileNumber" id="mobileNumber"  pattern="[0-9]{10}" [maxlength]="10" required>
-              </mat-form-field>
-            </td>
-            <td>
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Gender</mat-label>
                 <mat-select formControlName="gender" required>
@@ -93,14 +85,30 @@
                   <mat-option value="Famale">Female</mat-option>
                   <mat-option value="Others">Others</mat-option>
                 </mat-select>
-
               </mat-form-field>
-            </td>
-          </tr>
+            </div>
 
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>MobileNumber</mat-label>
+                <span matPrefix>+91 &nbsp;</span>
+                <input matInput type="number" formControlName="mobileNumber" id="mobileNumber" pattern="[0-9]{10}"
+                  maxlength="10" required>
+              </mat-form-field>
+            </div>
 
-          <tr>
-            <td>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label> SamagraId </mat-label>
+                <input matInput type="number" formControlName="samagraId" id="SamagraId">
+              </mat-form-field>
+            </div>
+
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="4" [rowspan]="1">
+
+            <div class="col-md-6">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>RTE Student</mat-label>
                 <mat-select formControlName="rteStudent" required>
@@ -108,8 +116,9 @@
                   <mat-option value="false" (click)="rteStudent(false)">No</mat-option>
                 </mat-select>
               </mat-form-field>
-            </td>
-            <td>
+            </div>
+
+            <div class="col-md-6">
               <mat-form-field class="example-full-width" appearance="fill">
                 <!-- <input matInput type="text" placeholder="ClassToJoin" formControlName="classToJoin" id="classToJoin"  > -->
                 <mat-label>ClassToJoin</mat-label>
@@ -129,83 +138,88 @@
                   <mat-option value="10" *ngIf="isRteStudent == false">Tenth Class</mat-option>
                 </mat-select>
               </mat-form-field>
-            </td>
+            </div>
+          </mat-grid-tile>
 
-          </tr>
+          <mat-grid-tile [colspan]="4" [rowspan]="1">
 
-
-          <tr>
-            <td>
-              <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label>Permanent Address</mat-label>
-                <textarea matInput type="text" formControlName="permanentAddress" id="permanentAddress"></textarea>
-              </mat-form-field>
-            </td>
-            <td>
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Present Address</mat-label>
                 <textarea matInput type="text" formControlName="presentAddress" id="presentAddress"></textarea>
               </mat-form-field>
-            </td>
-            <td>
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Permanent Address</mat-label>
+                <textarea matInput type="text" formControlName="permanentAddress" id="permanentAddress"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>MarksOfIdentification</mat-label>
                 <textarea matInput type="text" formControlName="marksOfIdentification"
                   id="marksOfIdentification"></textarea>
               </mat-form-field>
-            </td>
-          </tr>
+            </div>
 
+          </mat-grid-tile>
 
-          <tr>
-            <td>
+          <mat-grid-tile [colspan]="4" [rowspan]="1">
+
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> Religion </mat-label>
                 <input matInput type="text" formControlName="religion" id="religion">
               </mat-form-field>
-            </td>
-            <td>
+            </div>
+
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> Caste </mat-label>
                 <input matInput type="text" formControlName="caste" id="caste">
               </mat-form-field>
-            </td>
-            <td>
+            </div>
+
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> CastId </mat-label>
                 <input matInput type="text" formControlName="castId" id="castId">
               </mat-form-field>
-            </td>
-          </tr>
+            </div>
 
 
-          <tr>
-            <td>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="4" [rowspan]="1">
+
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> AadharNumber </mat-label>
-                <input matInput type="number" formControlName="aadharNumber"
-                  id="aadharNumber" maxlength="12">
+                <input matInput type="number" formControlName="aadharNumber" id="aadharNumber" maxlength="12">
               </mat-form-field>
-            </td>
-            <td>
+            </div>
+
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> BankAccountNumber </mat-label>
-                <input matInput type="text"  formControlName="bankAccountNumber"
-                  id="bankAccountNumber">
+                <input matInput type="text" formControlName="bankAccountNumber" id="bankAccountNumber">
               </mat-form-field>
-            </td>
-            <td>
+            </div>
+
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> IFSC Code </mat-label>
-                <input matInput type="text"  formControlName="ifscCode" id="ifscCode">
+                <input matInput type="text" formControlName="ifscCode" id="ifscCode">
               </mat-form-field>
-            </td>
+            </div>
+          </mat-grid-tile>
 
-          </tr>
+          <mat-grid-tile [colspan]="4" [rowspan]="1">
 
-
-          <tr>
-            <td>
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>ChildHandicapped</mat-label>
                 <mat-select formControlName="childHandicapped">
@@ -213,94 +227,61 @@
                   <mat-option value="false">No</mat-option>
                 </mat-select>
               </mat-form-field>
-            </td>
-            <td>
+            </div>
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>DateOfAdmission</mat-label>
-                <input matInput type="date"  formControlName="dateOfAdmission"
-                  id="dateOfAdmission">
+                <input matInput type="date" formControlName="dateOfAdmission" id="dateOfAdmission">
               </mat-form-field>
-            </td>
-          </tr>
-
-
-          <tr>
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Siblings</mat-label>
-              <mat-select formControlName="siblings" required>
-                <mat-option value="true" (click)="siblings(true)">Yes</mat-option>
-                <mat-option value="false" (click)="siblings(false)">No</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </tr>
-
-
-            <div  *ngIf="isSiblings == true">
-              <button type="button" mat-raised-button color="primary" (click)="addSibling()" title="Add Sibling">
-                <mat-icon>add</mat-icon>
-              </button>
-              <br><br>
-              <table formArrayName="siblingInformation">
-
-                <tr *ngFor="let quantity of siblingInformation().controls; let i=index" [formGroupName]="i">
-                  <td>
-
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Name</mat-label>
-                      <input matInput type="text" formControlName="name">
-                    </mat-form-field>
-                  </td>
-                  <td>
-
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Age</mat-label>
-                      <input matInput type="number" formControlName="age">
-                    </mat-form-field>
-                  </td>
-                  <td style="margin-bottom: 61px;padding-bottom: 18px;">
-                    <button mat-raised-button color="warn"  (click)="removeSibling(i)" title="Remove">
-                      <mat-icon>close</mat-icon>
-                    </button>
-                  </td>
-                </tr>
-              </table>
-
             </div>
 
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Siblings</mat-label>
+                <mat-select formControlName="siblings" required>
+                  <mat-option value="true" (click)="siblings(true)">Yes</mat-option>
+                  <mat-option value="false" (click)="siblings(false)">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
+          </mat-grid-tile>
 
-        </table>
+        </mat-grid-list>
+
+        <div *ngIf="isSiblings == true">
+          <button type="button" mat-raised-button color="primary" (click)="addSibling()" title="Add Sibling">
+            <mat-icon>add</mat-icon>
+          </button>
+          <br><br>
+          <table formArrayName="siblingInformation">
+
+            <tr *ngFor="let quantity of siblingInformation().controls; let i=index" [formGroupName]="i">
+              <td>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Name</mat-label>
+                  <input matInput type="text" formControlName="name">
+                </mat-form-field>
+              </td>
+              <span style="margin-left: 15px;"></span>
+              <td>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Age</mat-label>
+                  <input matInput type="number" formControlName="age">
+                </mat-form-field>
+              </td>
+              <span style="margin-left: 10px;"></span>
+              <td style="margin-bottom: 61px;padding-bottom: 18px;">
+                <button mat-raised-button color="warn" (click)="removeSibling(i)" title="Remove">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </table>
+
+        </div>
       </mat-tab>
-
-      <!--
-      <mat-tab label="Fee Deatls:">
-        <div class="example-large-box mat-elevation-z4" fxLayout="column wrap start" fxLayoutAlign="left">
-
-        <mat-form-field class="example-full-width" appearance="fill">
-          <input matInput type="number" placeholder="Admission Fee" formControlName="admissionFee" id="admissionFee">
-        </mat-form-field>
-        &nbsp; &nbsp;
-
-        <mat-form-field class="example-full-width" appearance="fill">
-          <input matInput type="number" placeholder="Exam Fee" formControlName="examFee" id="examFee">
-        </mat-form-field>
-        &nbsp; &nbsp;
-
-        <mat-form-field class="example-full-width" appearance="fill">
-          <input matInput type="number" placeholder="School Fee" formControlName="schoolFee" id="schoolFee">
-        </mat-form-field>
-        &nbsp; &nbsp;
-
-        <mat-form-field class="example-full-width" appearance="fill">
-          <input matInput type="number" placeholder="Bus Fee" formControlName="busFee" id="busFee">
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" (click)="Total(student.value)">Total</button> &nbsp; :
-        <mat-label style="font-size: large;">{{totalFee}}</mat-label>
-      </div>
-      </mat-tab>
--->
-
     </mat-tab-group>
 
   </mat-dialog-content>

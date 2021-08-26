@@ -4,8 +4,6 @@ import { HomeComponent } from './modules/home/home.component';
 import { LoginComponent } from './modules/login/login.component';
 import { LogoutComponent } from './modules/logout/logout.component';
 import { AllStudentsComponent } from './modules/student/all-students/all-students.component';
-import { NewStudentComponent } from './modules/student/new-student/new-student.component';
-import { UpdateStudentComponent } from './modules/student/update-student/update-student.component';
 import { AuthGuardService } from './services/authGaurdService/auth-guard.service';
 
 const routes: Routes = [

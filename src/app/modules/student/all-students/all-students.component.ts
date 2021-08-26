@@ -29,9 +29,9 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
 
   displayedColumns = ['registrationId', 'dateOfAdmission', 'samagraId', 'firstName', 'lastName', 'fatherName', 'motherName', 'mobileNumber',
     'presentAddress', 'permanentAddress', 'classToJoin', 'gender', 'dateOfBirth', 'marksOfIdentification', 'religion', 'caste', 'castId',
-    'aadharNumber', 'bankAccountNumber', 'ifscCode', 'childHandicapped', 'fatherMotherExpired','siblings','siblingInformation','rteStudent',
-   // 'admissionFee', 'examFee', 'schoolFee', 'busFee', 'totalFee','admissionFeePaid', 'admissionFeeDue', 'examFeePaid', 'examFeeDue', 'busFeePaid', 'busFeeDue',
-     'Actions'];
+    'aadharNumber', 'bankAccountNumber', 'ifscCode', 'childHandicapped', 'fatherMotherExpired', 'siblings', 'siblingInformation', 'rteStudent',
+    // 'admissionFee', 'examFee', 'schoolFee', 'busFee', 'totalFee','admissionFeePaid', 'admissionFeeDue', 'examFeePaid', 'examFeeDue', 'busFeePaid', 'busFeeDue',
+    'Actions'];
 
 
   public dataSource = new MatTableDataSource<Student>();
@@ -41,18 +41,23 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
   sortProperty: 'desc';
   id: any;
   id1: any;
-  rte:any;
-  type:string;
+  rte: any;
+  type: string;
   filterText = '';
-  constructor(private service: StudentService, private router: Router, public dialog: MatDialog,private route: ActivatedRoute,private loaderSer:LoaderService) { }
+  isActivateFilter: boolean = false;
+  constructor(private service: StudentService, private router: Router, public dialog: MatDialog, private route: ActivatedRoute, private loaderSer: LoaderService) {
+    this.route.params.subscribe(params => {
+      this.ngOnInit();  
+    });
+  }
 
   ngOnInit(): void {
 
 
-    this.dataSource.filterPredicate = function(data, filter: string): boolean {
+    this.dataSource.filterPredicate = function (data, filter: string): boolean {
       return data.firstName.toLowerCase().includes(filter) ||
-      data.registrationId.toString().includes(filter)||
-      data.samagraId.toString().includes(filter)
+        data.registrationId.toString().includes(filter) ||
+        data.samagraId.toString().includes(filter)
     };
 
     this.rte = this.route.snapshot.params['id'];
@@ -61,32 +66,32 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
 
 
 
-    if(this.id == null && this.id1 != null ){
+    if (this.id == null && this.id1 != null) {
       console.log("Rte individula students load");
       this.getRteStudents(this.id1);
-    }else if(this.id == null && this.rte != null){
+    } else if (this.id == null && this.rte != null) {
       console.log("all Rte Students Load");
       this.getAllRteStudents();
     }
 
 
-    if(this.id != null && this.id1 == null){
+    if (this.id != null && this.id1 == null) {
       console.log("normal individula class students load");
       this.getNormalStudents(this.id);
-    }else if(this.id1 == null && this.rte == null){
+    } else if (this.id1 == null && this.rte == null) {
       console.log("all normal students");
       this.getAllNormalStudents();
+    }
+
+    if (this.id1 != null && this.id == null) {
+      this.type = 'RTE'
+    } else {
+      this.type = 'Normal'
     }
 
   }
 
   ngAfterViewInit() {
-    if(this.id1 != null && this.id == null){
-      this.type = 'RTE'
-    }else{
-      this.type = 'Normal'
-    }
-
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -99,9 +104,9 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
 
 
   pageable = {
-    page : 0,
-    size : 20,
-    sort : {
+    page: 0,
+    size: 20,
+    sort: {
       field: "modifiedDate",
       order: "DESC"
     }
@@ -129,7 +134,7 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
 
   }
 
-  getNormalStudents(id:any) {
+  getNormalStudents(id: any) {
     this.loaderSer.showNgxSpinner();
     this.service.getNormalClassStudents(id).subscribe((data) => {
       this.dataSource.data = data;
@@ -153,7 +158,7 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getRteStudents(id:any) {
+  getRteStudents(id: any) {
     this.loaderSer.showNgxSpinner();
     this.service.getRteClassStudents(id).subscribe((data) => {
       this.dataSource.data = data;
@@ -166,15 +171,15 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
 
 
   edit(student) {
-    const dialogRef = this.dialog.open(UpdateStudentComponent, { data: student,disableClose: true, hasBackdrop: true, width: '1000px' });
+    const dialogRef = this.dialog.open(UpdateStudentComponent, { data: student, disableClose: true, hasBackdrop: true, width: '1000px' });
     dialogRef.afterClosed().subscribe(dialogResult => {
       this.result = dialogResult;
       if (this.result == 'success') {
-        this.dialog.open(SuccessMessageComponent, { width: "600px",panelClass: 'dialog-container-custom-success', data: new SuccessMessage("Student updated successfully") });
+        this.dialog.open(SuccessMessageComponent, { width: "600px", panelClass: 'dialog-container-custom-success', data: new SuccessMessage("Student updated successfully") });
         this.ngOnInit();
       }
       else if (this.result == 'failure') {
-        this.dialog.open(ErrorMessageComponent, { width: "600px",panelClass: 'dialog-container-custom-failure', data: new ErrorMessage("Student Updation failure") });
+        this.dialog.open(ErrorMessageComponent, { width: "600px", panelClass: 'dialog-container-custom-failure', data: new ErrorMessage("Student Updation failure") });
       }
     })
   }
@@ -183,7 +188,7 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
   result: string = '';
   delete(element): void {
 
-    const message = `Are you sure you want to delete this student ?`+'  ' + element.firstName;
+    const message = `Are you sure you want to delete this student ?` + '  ' + element.firstName;
 
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
 
@@ -201,11 +206,11 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
         this.loaderSer.showNgxSpinner();
         element.status = 'DELETED';
         this.service.delete(element.registrationId).subscribe((data) => {
-          this.dialog.open(SuccessMessageComponent, { width: "600px",panelClass: 'dialog-container-custom-success', data: new SuccessMessage("Student deleted successfully") });
+          this.dialog.open(SuccessMessageComponent, { width: "600px", panelClass: 'dialog-container-custom-success', data: new SuccessMessage("Student deleted successfully") });
           this.ngOnInit();
           this.loaderSer.hideNgxSpinner();
         }, (error) => {
-          this.dialog.open(ErrorMessageComponent, { width: "600px",panelClass: 'dialog-container-custom-failure', data: new ErrorMessage("Student deletion failure") });
+          this.dialog.open(ErrorMessageComponent, { width: "600px", panelClass: 'dialog-container-custom-failure', data: new ErrorMessage("Student deletion failure") });
           console.log(error);
           this.loaderSer.hideNgxSpinner();
         })
@@ -223,7 +228,7 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
         this.dialog.open(SuccessMessageComponent, { width: "600px", panelClass: 'dialog-container-custom-success', data: new SuccessMessage("Student created Successfully") });
       }
       else if (this.result == 'failure') {
-        this.dialog.open(ErrorMessageComponent, { width: "600px",panelClass: 'dialog-container-custom-failure', data: new ErrorMessage("Student creation Failure") });
+        this.dialog.open(ErrorMessageComponent, { width: "600px", panelClass: 'dialog-container-custom-failure', data: new ErrorMessage("Student creation Failure") });
       }
     })
   }
@@ -236,11 +241,11 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
   name: 'highlightSearch'
 })
 export class HighlightSearchPipe implements PipeTransform {
-constructor(){}
+  constructor() { }
 
-transform(value: string, search: string): string {
-  const valueStr = value + ''; // Ensure numeric values are converted to strings
-  return valueStr.replace(new RegExp('(?![^&;]+;)(?!<[^<>]*)(' + search + ')(?![^<>]*>)(?![^&;]+;)', 'gi'), '<strong class="text-highlight">$1</strong>');
-}
+  transform(value: string, search: string): string {
+    const valueStr = value + ''; // Ensure numeric values are converted to strings
+    return valueStr.replace(new RegExp('(?![^&;]+;)(?!<[^<>]*)(' + search + ')(?![^<>]*>)(?![^&;]+;)', 'gi'), '<strong class="text-highlight">$1</strong>');
+  }
 }
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from '../authService/authentication.service';
@@ -8,11 +9,11 @@ import { AuthenticationService } from '../authService/authentication.service';
 })
 export class LoaderService {
 
-  public isLoading:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  // public isLoading:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+   isHomeActive= new BehaviorSubject(false);
+  // public isLogin:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._authenticationService.isUserLoggedIn());
 
-  public isLogin:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._authenticationService.isUserLoggedIn());
-
-  constructor(public SpinnerSer:NgxSpinnerService,public _authenticationService:AuthenticationService) { }
+  constructor(public SpinnerSer:NgxSpinnerService,public _authenticationService:AuthenticationService,public _snackBar: MatSnackBar) { }
 
   showNgxSpinner(){
     this.SpinnerSer.show();
@@ -20,6 +21,20 @@ export class LoaderService {
 
   hideNgxSpinner(){
     this.SpinnerSer.hide();
+  }
+
+  showSucessSnakbar(message){
+    this._snackBar.open(message, '', {
+      duration: 3000,
+      panelClass: ["success"]
+    });
+  }
+
+  showFailureSnakbar(message){
+    this._snackBar.open(message, '', {
+      duration: 3000,
+      panelClass: ["failure"]
+    });
   }
 
 

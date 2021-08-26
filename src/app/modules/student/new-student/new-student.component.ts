@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormControlName, FormBuilder, FormArray } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ErrorMessage,ErrorMessageComponent } from 'src/app/conformDialogBoxes/success/error-message/error-message.component';
 import { Student } from 'src/app/model/Student';
+import { LoaderService } from 'src/app/services/loader/loader.service';
 import { StudentService } from 'src/app/services/studentService/student.service';
 
 @Component({
@@ -13,6 +14,8 @@ import { StudentService } from 'src/app/services/studentService/student.service'
 })
 export class NewStudentComponent implements OnInit {
 
+
+
   public student: FormGroup;
   dataSource: Student[];
   selected = '';
@@ -20,8 +23,11 @@ export class NewStudentComponent implements OnInit {
   isRteStudent = false;
   isSiblings = false;
   myFormGroup: any;
+  imageSrc: string;
+  selectedFile: File;
 
-  constructor(private router: Router, private service: StudentService, private formBuilder: FormBuilder, public dialogRef: MatDialogRef<NewStudentComponent>,public dialog: MatDialog) {
+  constructor(private router: Router, private service: StudentService, private formBuilder: FormBuilder,
+    public dialogRef: MatDialogRef<NewStudentComponent>,public dialog: MatDialog, public loaderSer:LoaderService) {
 
     this.student = this.formBuilder.group({
       registrationId: new FormControl('', []),
@@ -88,9 +94,14 @@ export class NewStudentComponent implements OnInit {
   }
 
   create(student) {
-    let body = JSON.stringify(student);
+    this.loaderSer.showNgxSpinner();
     this.service.Create(student).subscribe((data) => {
-      this.dialogRef.close('success');
+      if(this.selectedFile != null){
+        this.onUpload(data.registrationId);
+      }else{
+        this.dialogRef.close('success');
+        this.loaderSer.hideNgxSpinner();
+      }
     }, (error) => {
       console.log(error);
       this.dialog.open(ErrorMessageComponent, { width: "600px",panelClass: 'dialog-container-custom-failure', data: new ErrorMessage("Student creation Failure") });
@@ -119,5 +130,47 @@ export class NewStudentComponent implements OnInit {
     this.siblingInformation().removeAt(i);
   }
 
+  onFileChange(event) {
+
+    this.selectedFile = event.target.files[0];
+
+    const reader = new FileReader();
+    this.imageSrc = reader.result as string;
+
+    if(event.target.files && event.target.files.length) {
+      const [image] = event.target.files;
+      reader.readAsDataURL(image);
+
+      reader.onload = () => {
+
+        this.imageSrc = reader.result as string;
+
+        this.student.patchValue({
+          image: JSON.stringify(reader.result)
+        });
+
+      };
+
+    }
+  }
+
+  onUpload(registrationId) {
+    const image = new FormData();
+    image.append('imageFile', this.selectedFile, this.selectedFile.name);
+    this.service.uploadImage(registrationId,image).subscribe((data) => {
+      this.dialogRef.close('success');
+        console.log("image uploaded succesfully");
+        this.loaderSer.hideNgxSpinner();
+    },(error)=>{
+      console.log("image uploaded failure");
+      this.loaderSer.hideNgxSpinner();
+    })
+
+  }
+
+
+  noImage(){
+    this.imageSrc ='D:/School App/front end/registrationWithMaterialdesign/src/assets/noImage.jpg';
+  }
 
 }

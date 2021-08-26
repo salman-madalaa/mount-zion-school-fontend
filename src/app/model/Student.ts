@@ -1,6 +1,7 @@
 import { siblingInformation } from "./siblingInformation";
 
 export class Student {
+  photo: string;
 
   registrationId:BigInteger;
 

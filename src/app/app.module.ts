@@ -23,7 +23,6 @@ import { ErrorMessageComponent } from './conformDialogBoxes/success/error-messag
 import { SuccessMessageComponent } from './conformDialogBoxes/success/success-message/success-message.component';
 import { NgxSpinnerModule} from 'ngx-spinner';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +34,7 @@ import { NgxSpinnerModule} from 'ngx-spinner';
     ConformationDialogComponent,
     ErrorMessageComponent,
     SuccessMessageComponent,
-    HighlightSearchPipe
+    HighlightSearchPipe,
   ],
   imports: [
     BrowserModule, FormsModule, HttpClientModule,
