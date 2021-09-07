@@ -29,8 +29,8 @@ export class StudentService {
 
   updateStudent(registrationId: number, ob): Observable<any> {
     let body = JSON.stringify(ob);
-    let options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
-    return this.http.put(this.baseUrl + 'api/student/' + registrationId, body, options)
+   // let options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
+    return this.http.put(this.baseUrl + 'api/student/' + registrationId, ob);
   }
 
   public delete(id: number) {
@@ -84,7 +84,7 @@ studentGetImage(regId): Observable<any> {
   return this.http.get(this.baseUrl + 'api/studentImage/get/' + regId ,options);
 }
 
- 
+
 }
 
 /*

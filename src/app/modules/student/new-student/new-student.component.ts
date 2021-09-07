@@ -26,7 +26,7 @@ export class NewStudentComponent implements OnInit {
   selectedFile: File;
 
   constructor(private router: Router, private service: StudentService, private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<NewStudentComponent>,public dialog: MatDialog, public loaderSer:LoaderService) {
+    public dialogRef: MatDialogRef<NewStudentComponent>, public dialog: MatDialog, public loaderSer: LoaderService) {
 
     this.student = this.formBuilder.group({
       registrationId: new FormControl('', []),
@@ -95,9 +95,9 @@ export class NewStudentComponent implements OnInit {
   create(student) {
     this.loaderSer.showNgxSpinner();
     this.service.Create(student).subscribe((data) => {
-      if(this.selectedFile != null){
+      if (this.selectedFile != null) {
         this.onUpload(data.registrationId);
-      }else{
+      } else {
         this.dialogRef.close('success');
         this.loaderSer.hideNgxSpinner();
       }
@@ -109,7 +109,7 @@ export class NewStudentComponent implements OnInit {
   }
 
 
- //----- add the Sibling Information--------------------//
+  //----- add the Sibling Information--------------------//
   siblingInformation(): FormArray {
     return this.student.get("siblingInformation") as FormArray
   }
@@ -131,45 +131,53 @@ export class NewStudentComponent implements OnInit {
 
   onFileChange(event) {
 
-    this.selectedFile = event.target.files[0];
+    if (Math.round(event.target.files[0].size / 1024) < 70 && Math.round(event.target.files[0].size / 1024) > 40) {
+      this.selectedFile = event.target.files[0];
 
-    const reader = new FileReader();
-    this.imageSrc = reader.result as string;
+      const reader = new FileReader();
+      this.imageSrc = reader.result as string;
 
-    if(event.target.files && event.target.files.length) {
-      const [image] = event.target.files;
-      reader.readAsDataURL(image);
+      if (event.target.files && event.target.files.length) {
+        const [image] = event.target.files;
+        reader.readAsDataURL(image);
 
-      reader.onload = () => {
+        reader.onload = () => {
 
-        this.imageSrc = reader.result as string;
+          this.imageSrc = reader.result as string;
 
-        this.student.patchValue({
-          image: JSON.stringify(reader.result)
-        });
+          this.student.patchValue({
+            image: JSON.stringify(reader.result)
+          });
 
-      };
+        };
 
+      }
+
+    } else {
+      this.loaderSer.showNormalSnakbar("Image size should be beteen 40kb to 70 kb");
     }
+
   }
+
 
   onUpload(registrationId) {
     const image = new FormData();
     image.append('imageFile', this.selectedFile, this.selectedFile.name);
-    this.service.uploadImage(registrationId,image).subscribe((data) => {
+
+    this.service.uploadImage(registrationId, image).subscribe((data) => {
       this.dialogRef.close('success');
-        console.log("image uploaded succesfully");
-        this.loaderSer.hideNgxSpinner();
-    },(error)=>{
+      console.log("image uploaded succesfully");
+      this.loaderSer.hideNgxSpinner();
+    }, (error) => {
       console.log("image uploaded failure");
       this.loaderSer.hideNgxSpinner();
-    })
+    });
 
   }
 
 
-  noImage(){
-    this.imageSrc ='D:/School App/front end/registrationWithMaterialdesign/src/assets/noImage.jpg';
+  noImage() {
+    this.imageSrc = 'D:/School App/front end/registrationWithMaterialdesign/src/assets/noImage.jpg';
   }
 
 }

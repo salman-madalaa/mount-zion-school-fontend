@@ -37,5 +37,10 @@ export class LoaderService {
     });
   }
 
+  showNormalSnakbar(message){
+    this._snackBar.open(message, '', {
+      duration: 5000,
+    });
+  }
 
 }

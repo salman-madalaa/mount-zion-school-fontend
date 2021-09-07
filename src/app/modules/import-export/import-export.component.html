@@ -2,7 +2,7 @@
   <div (click)="import.click()" class="import">
     <h4>Click here to select file to import</h4>
   </div>
-  <input type="file" style="display: none" (change)="onFileChange($event)" #import>
+  <input type="file" accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display: none" (change)="onFileChange($event)" #import>
 </div>
 
 

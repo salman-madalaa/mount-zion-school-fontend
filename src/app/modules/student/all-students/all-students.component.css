@@ -156,3 +156,10 @@ td , th {
   margin-right: 15px;
   cursor: pointer !important;
 }
+
+img{
+  height: 38px;
+  width: 38px;
+  border-radius: 10%;
+  cursor: pointer;
+}

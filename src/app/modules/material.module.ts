@@ -31,6 +31,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import {MatMenuModule} from '@angular/material/menu';
+import { MdePopoverModule } from '@material-extended/mde';
 
 const MaterialComponents=[
   MatButtonModule,
@@ -60,6 +61,7 @@ const MaterialComponents=[
   MatListModule,
   MatSlideToggleModule,
   MatMenuModule,
+  MdePopoverModule,
 
     A11yModule,
     CdkStepperModule,

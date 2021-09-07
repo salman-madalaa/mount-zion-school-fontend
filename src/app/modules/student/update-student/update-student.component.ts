@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,6 +7,7 @@ import { ConfirmationDialogService } from 'src/app/services/conformatioDialog/co
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { SiblingInformationService } from 'src/app/services/siblingInformationService/sibling-information.service';
 import { StudentService } from 'src/app/services/studentService/student.service';
+import { AllStudentsComponent } from '../all-students/all-students.component';
 
 @Component({
   selector: 'app-update-student',
@@ -15,6 +16,8 @@ import { StudentService } from 'src/app/services/studentService/student.service'
 })
 
 export class UpdateStudentComponent implements OnInit {
+
+
 
   public student: FormGroup;
   FMExpired: boolean;
@@ -71,43 +74,50 @@ export class UpdateStudentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.student.patchValue({
-      registrationId: this.data.registrationId,
-      dateOfAdmission: this.data.dateOfAdmission,
-      samagraId: this.data.samagraId,
-      firstName: this.data.firstName,
-      lastName: this.data.lastName,
-      fatherMotherExpired: this.data.fatherMotherExpired,
-      fatherName: this.data.fatherName,
-      motherName: this.data.motherName,
-      mobileNumber: this.data.mobileNumber,
-      presentAddress: this.data.presentAddress,
-      permanentAddress: this.data.permanentAddress,
-      classToJoin: this.data.classToJoin,
-      gender: this.data.gender,
-      dateOfBirth: this.data.dateOfBirth,
-      marksOfIdentification: this.data.marksOfIdentification,
-      religion: this.data.religion,
-      caste: this.data.caste,
-      castId: this.data.castId,
-      aadharNumber: this.data.aadharNumber,
-      bankAccountNumber: this.data.bankAccountNumber,
-      ifscCode: this.data.ifscCode,
-      childHandicapped: this.data.childHandicapped,
-      siblings: this.data.siblings,
-      rteStudent: this.data.rteStudent,
-      siblingInformation: this.data.siblingInformation,
-
-    });
-
-    this.FMExpired = this.data.fatherMotherExpired;
-    this.isRteStudent = this.data.rteStudent;
-    this.isSiblings = this.data.siblings;
-    this.student.setControl('siblingInformation', this.setExistsSiblingInformation(this.data.siblingInformation));
-    this.regId = this.data.registrationId;
-    this.studentImage(this.data.registrationId);
-
+    this.loadData();
   }
+
+loadData(){
+  this.student.patchValue({
+    registrationId: this.data.registrationId,
+    dateOfAdmission: this.data.dateOfAdmission,
+    samagraId: this.data.samagraId,
+    firstName: this.data.firstName,
+    lastName: this.data.lastName,
+    fatherMotherExpired: this.data.fatherMotherExpired,
+    fatherName: this.data.fatherName,
+    motherName: this.data.motherName,
+    mobileNumber: this.data.mobileNumber,
+    presentAddress: this.data.presentAddress,
+    permanentAddress: this.data.permanentAddress,
+    classToJoin: this.data.classToJoin,
+    gender: this.data.gender,
+    dateOfBirth: this.data.dateOfBirth,
+    marksOfIdentification: this.data.marksOfIdentification,
+    religion: this.data.religion,
+    caste: this.data.caste,
+    castId: this.data.castId,
+    aadharNumber: this.data.aadharNumber,
+    bankAccountNumber: this.data.bankAccountNumber,
+    ifscCode: this.data.ifscCode,
+    childHandicapped: this.data.childHandicapped,
+    siblings: this.data.siblings,
+    rteStudent: this.data.rteStudent,
+    siblingInformation: this.data.siblingInformation,
+
+  });
+
+  this.FMExpired = this.data.fatherMotherExpired;
+  this.isRteStudent = this.data.rteStudent;
+  this.isSiblings = this.data.siblings;
+  this.student.setControl('siblingInformation', this.setExistsSiblingInformation(this.data.siblingInformation));
+  this.regId = this.data.registrationId;
+
+  this.imageSrc = 'data:image/jpeg;base64,' + this.data.studentImage.picByte;
+
+
+}
+
 
   setExistsSiblingInformation(siblingInformationSets: any): FormArray {
     const formArray = new FormArray([]);
@@ -219,38 +229,37 @@ export class UpdateStudentComponent implements OnInit {
     this.siblingInformation().removeAt(i);
   }
 
+  fileValidate(event){
+    let isValid= false;
 
-  studentImage(regId) {
-    this.loaderSer.showNgxSpinner();
-    this.service.studentGetImage(regId).subscribe((data) => {
-      this.retrieveResonse = data;
-      this.base64Data = this.retrieveResonse.picByte;
-      this.imageSrc = 'data:image/jpeg;base64,' + this.base64Data;
-      this.loaderSer.hideNgxSpinner();
-    }, (error) => {
-      console.log(error);
-      this.loaderSer.hideNgxSpinner();
-    });
+    if (Math.round(event.target.files[0].size / 1024) < 70 && Math.round(event.target.files[0].size / 1024) > 40) {
+      isValid = true;
+    }else{
+      isValid= false;
+      this.loaderSer.showNormalSnakbar("Image size should be beteen 40kb to 70 kb");
+    }
+    return isValid;
   }
 
   onFileChange(event) {
-    this.loaderSer.showNgxSpinner();
-    this.selectedFile = event.target.files[0];
 
-    const image = new FormData();
-    image.append('imageFile', this.selectedFile, this.selectedFile.name);
-    this.service.updateImage(this.regId, image).subscribe((data) => {
-      this.retrieveResonse = data;
-      this.base64Data = this.retrieveResonse.picByte;
-      this.imageSrc = 'data:image/png;base64,' + this.base64Data;
-      this.loaderSer.hideNgxSpinner();
-      this.loaderSer.showSucessSnakbar("Image uploaded succesfully");
-    }, (error) => {
-      console.log(error);
-      this.loaderSer.hideNgxSpinner();
-      this.loaderSer.showFailureSnakbar("Image uploaded failure");
-    });
-
+    if (this.fileValidate(event)) {
+      this.selectedFile = event.target.files[0];
+      const image = new FormData();
+      image.append('imageFile', this.selectedFile, this.selectedFile.name);
+      this.loaderSer.showNgxSpinner();
+      this.service.updateImage(this.regId, image).subscribe((data) => {
+        this.retrieveResonse = data;
+        this.base64Data = this.retrieveResonse.picByte;
+        this.imageSrc = 'data:image/png;base64,' + this.base64Data;
+        this.loaderSer.hideNgxSpinner();
+        this.loaderSer.showSucessSnakbar("Image uploaded succesfully");
+      }, (error) => {
+        console.log(error);
+        this.loaderSer.hideNgxSpinner();
+        this.loaderSer.showFailureSnakbar("Image uploaded failure");
+      });
+    }
   }
 
   deleteImage() {
@@ -276,24 +285,22 @@ export class UpdateStudentComponent implements OnInit {
 
 
   newImageUpload(event) {
-    this.loaderSer.showNgxSpinner();
-    this.selectedFile = event.target.files[0];
-    const image = new FormData();
-    image.append('imageFile', this.selectedFile, this.selectedFile.name);
-    this.service.uploadImage(this.regId, image).subscribe((data) => {
-      this.retrieveResonse = data;
-      this.base64Data = this.retrieveResonse.picByte;
-      this.imageSrc = 'data:image/png;base64,' + this.base64Data;
-      this.loaderSer.hideNgxSpinner();
-      this.loaderSer.showSucessSnakbar("Image uploaded succesfully");
-    }, (error) => {
-      console.log(error);
-      this.loaderSer.hideNgxSpinner();
-      this.loaderSer.showFailureSnakbar("Image uploaded failure");
-    })
-
+    if (this.fileValidate(event)) {
+      this.loaderSer.showNgxSpinner();
+      this.selectedFile = event.target.files[0];
+      const image = new FormData();
+      image.append('imageFile', this.selectedFile, this.selectedFile.name);
+      this.service.uploadImage(this.regId, image).subscribe((data) => {
+        this.retrieveResonse = data;
+        this.base64Data = this.retrieveResonse.picByte;
+        this.imageSrc = 'data:image/png;base64,' + this.base64Data;
+        this.loaderSer.hideNgxSpinner();
+        this.loaderSer.showSucessSnakbar("Image uploaded succesfully");
+      }, (error) => {
+        console.log(error);
+        this.loaderSer.hideNgxSpinner();
+        this.loaderSer.showFailureSnakbar("Image uploaded failure");
+      })
+    }
   }
-
-
-
 }

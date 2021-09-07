@@ -21,6 +21,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ImportExportComponent } from './modules/import-export/import-export.component';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
+import { CommonDialogComponent } from './common-dialog/common-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,17 +33,19 @@ import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dial
     HomeComponent,
     HighlightSearchPipe,
     ImportExportComponent,
-    MatConfirmDialogComponent
+    MatConfirmDialogComponent,
+    CommonDialogComponent,
   ],
   imports: [
     BrowserModule, FormsModule, HttpClientModule,
     AppRoutingModule, ReactiveFormsModule,
     BrowserAnimationsModule, MatTabsModule, FlexModule,
-    MatTableModule, MatDialogModule, MatFormFieldModule, MaterialModule, NgxSpinnerModule
+    MatTableModule, MatDialogModule, MatFormFieldModule,
+    MaterialModule, NgxSpinnerModule,
   ],
   entryComponents: [
-    AllStudentsComponent, UpdateStudentComponent,
-    NewStudentComponent,  MatConfirmDialogComponent
+    AllStudentsComponent, UpdateStudentComponent,CommonDialogComponent,
+    NewStudentComponent,  MatConfirmDialogComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [{

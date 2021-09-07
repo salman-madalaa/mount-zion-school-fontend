@@ -1,20 +1,15 @@
-import { state } from '@angular/animations';
 import { AfterViewInit, Component, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
+import { CommonDialogComponent } from 'src/app/common-dialog/common-dialog.component';
 import { Student } from 'src/app/model/Student';
 import { ConfirmationDialogService } from 'src/app/services/conformatioDialog/confirmation-dialog.service';
 import { ImportExportService } from 'src/app/services/importExport/import-export.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { StudentService } from 'src/app/services/studentService/student.service';
-import { ImportExportComponent } from '../../import-export/import-export.component';
 import { NewStudentComponent } from '../new-student/new-student.component';
 import { UpdateStudentComponent } from '../update-student/update-student.component';
 
@@ -27,9 +22,9 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
 
 
 
-  displayedColumns = ['registrationId', 'dateOfAdmission', 'samagraId', 'firstName', 'lastName', 'fatherName', 'motherName', 'mobileNumber',
+  displayedColumns = ['registrationId','image' ,'dateOfAdmission', 'samagraId', 'firstName', 'lastName', 'fatherName', 'motherName', 'mobileNumber',
     'presentAddress', 'permanentAddress', 'classToJoin', 'gender', 'dateOfBirth', 'marksOfIdentification', 'religion', 'caste', 'castId',
-    'aadharNumber', 'bankAccountNumber', 'ifscCode', 'childHandicapped', 'fatherMotherExpired', 'siblings', 'siblingInformation', 'rteStudent',
+    'aadharNumber', 'bankAccountNumber', 'ifscCode', 'childHandicapped', 'fatherMotherExpired', 'siblings', 'rteStudent',
     // 'admissionFee', 'examFee', 'schoolFee', 'busFee', 'totalFee','admissionFeePaid', 'admissionFeeDue', 'examFeePaid', 'examFeeDue', 'busFeePaid', 'busFeeDue',
     'Actions'];
 
@@ -47,7 +42,9 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
   isActivateFilter: boolean = false;
   isRteStudent: boolean;
   classname: string;
-  constructor(private service: StudentService, private router: Router, public dialog: MatDialog, private route: ActivatedRoute, private loaderSer: LoaderService, private _importExportService: ImportExportService,private dialogSer:ConfirmationDialogService) {
+
+  constructor(private service: StudentService, public dialog: MatDialog, private route: ActivatedRoute, private loaderSer: LoaderService,
+     private _importExportService: ImportExportService,private dialogSer:ConfirmationDialogService) {
     this.route.params.subscribe(params => {
       this.ngOnInit();
     });
@@ -55,16 +52,20 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
+    this.type = this.route.snapshot.params['type'];
+    this.id = this.route.snapshot.params['className'];
+
+    this. loadData();
+
+  }
+ 
+  loadData(){
+
     this.dataSource.filterPredicate = function (data, filter: string): boolean {
       return data.firstName.toLowerCase().includes(filter) ||
         data.registrationId.toString().includes(filter) ||
         data.samagraId.toString().includes(filter)
     };
-
-
-    this.type = this.route.snapshot.params['type'];
-    this.id = this.route.snapshot.params['className'];
-
 
     if (this.type == "rte" && this.id != undefined && this.id != null) {
       console.log("Rte individula students load");
@@ -92,6 +93,7 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
     }
 
   }
+
 
   ngAfterViewInit() {
 
@@ -128,6 +130,7 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
     this.loaderSer.showNgxSpinner();
     this.service.getAllNormalStudents(this.pageable).subscribe((data) => {
       this.dataSource.data = data;
+      console.log(data);
       this.loaderSer.hideNgxSpinner();
     }, (error) => {
       console.log(error);
@@ -249,6 +252,15 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
       this.loaderSer.hideNgxSpinner();
       this.loaderSer.showFailureSnakbar(this.classname+ " class " + this.type + " students data exported failure")
     });
+  }
+
+
+  openBigImage(ob){
+     const dialogRef = this.dialog.open(CommonDialogComponent, {
+
+      data: {ob,title:"image"},
+    });
+
   }
 
 }
