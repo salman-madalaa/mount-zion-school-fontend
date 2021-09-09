@@ -29,7 +29,7 @@ export class NewStudentComponent implements OnInit {
     public dialogRef: MatDialogRef<NewStudentComponent>, public dialog: MatDialog, public loaderSer: LoaderService) {
 
     this.student = this.formBuilder.group({
-      registrationId: new FormControl('', []),
+      registrationId: new FormControl('', [Validators.required]),
       dateOfAdmission: new FormControl('', []),
       samagraId: new FormControl('', []),
       firstName: new FormControl('', []),
@@ -104,7 +104,7 @@ export class NewStudentComponent implements OnInit {
     }, (error) => {
       console.log(error);
       this.loaderSer.hideNgxSpinner();
-      this.loaderSer.showFailureSnakbar("Student creation Failure");
+      this.loaderSer.showFailureSnakbar(error.error.message);
     })
   }
 

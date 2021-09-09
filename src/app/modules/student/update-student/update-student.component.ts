@@ -171,7 +171,7 @@ loadData(){
     }, (error) => {
       console.log(error);
       this.loaderSer.hideNgxSpinner();
-      this.loaderSer.showFailureSnakbar("Student Updated Failure");
+      this.loaderSer.showFailureSnakbar(error.error.message);
     })
   }
 

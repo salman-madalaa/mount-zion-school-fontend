@@ -14,7 +14,7 @@ import { LoaderService } from 'src/app/services/loader/loader.service';
 
 export class ImportExportComponent implements OnInit {
 
-  selectedFile: File;
+  selectedFile: File | null = null;
   public import: FormGroup;
   isImport:boolean;
   isExport:boolean;
@@ -51,10 +51,12 @@ export class ImportExportComponent implements OnInit {
     this._importExportService.import(file).subscribe((data) => {
       this.loaderSer.hideNgxSpinner();
       this.loaderSer.showSucessSnakbar("Data imported successfully");
+      this.selectedFile=null;
     }, (error) => {
       console.log(error);
+      this.selectedFile=null;
       this.loaderSer.hideNgxSpinner();
-      this.loaderSer.showFailureSnakbar("Data imported Failure");
+      this.loaderSer.showFailureSnakbar(error.error.message);
     })
   }
 
@@ -67,6 +69,8 @@ export class ImportExportComponent implements OnInit {
     this.dialogSer.openConfirmationDialog(msg,title).afterClosed().subscribe(res => {
       if (res) {
         this.importStudentData();
+      }else{
+        this.selectedFile=null;
       }
     })
 
@@ -80,7 +84,7 @@ export class ImportExportComponent implements OnInit {
 
   exportIndividual(value){
     this.isRteStudent = value.isRteStudent;
-    this.className = value.className; 
+    this.className = value.className;
     this.loaderSer.showNgxSpinner();
     this._importExportService.exportInividual(this.isRteStudent,this.className).subscribe(x=>{
       var blob = new Blob([x], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });

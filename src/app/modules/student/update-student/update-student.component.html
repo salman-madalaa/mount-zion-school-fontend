@@ -12,27 +12,21 @@
 
           <mat-grid-tile [colspan]="3" [rowspan]="1">
             <div class="col-md-4">
-
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label> First name </mat-label>
+                <input matInput type="text" formControlName="registrationId" id="registrationId" readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> First name </mat-label>
                 <input matInput type="text" formControlName="firstName" id="firstName">
               </mat-form-field>
-
             </div>
             <div class="col-md-4">
-
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label> LastName </mat-label>
                 <input matInput type="text" formControlName="lastName" id="lastName" required>
-              </mat-form-field>
-
-            </div>
-            <div class="col-md-4">
-              <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label> DateOfBirth </mat-label>
-                <input matInput formControlName="dateOfBirth" id="dateOfBirth" [matDatepicker]="picker" required readonly>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
             </div>
           </mat-grid-tile>
@@ -102,12 +96,26 @@
 
             <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label> DateOfBirth </mat-label>
+                <input matInput formControlName="dateOfBirth" id="dateOfBirth" [matDatepicker]="picker" required readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>MobileNumber</mat-label>
                 <span matPrefix>+91 &nbsp;</span>
                 <input matInput type="number" formControlName="mobileNumber" id="mobileNumber" pattern="[0-9]{10}"
                   maxlength="10" required>
               </mat-form-field>
             </div>
+
+
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="4" [rowspan]="1">
 
             <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
@@ -116,11 +124,8 @@
               </mat-form-field>
             </div>
 
-          </mat-grid-tile>
 
-          <mat-grid-tile [colspan]="4" [rowspan]="1">
-
-            <div class="col-md-6">
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>RTE Student</mat-label>
                 <mat-select formControlName="rteStudent" required>
@@ -130,7 +135,7 @@
               </mat-form-field>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
               <mat-form-field class="example-full-width" appearance="fill">
                 <!-- <input matInput type="text" placeholder="ClassToJoin" formControlName="classToJoin" id="classToJoin"  > -->
                 <mat-label>ClassToJoin</mat-label>
