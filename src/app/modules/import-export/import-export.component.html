@@ -14,6 +14,7 @@
       <mat-form-field class="example-full-width" appearance="outline">
         <mat-label>is RTE Student</mat-label>
         <mat-select formControlName="isRteStudent" required>
+          <mat-option value="" >Select</mat-option>
           <mat-option value="true" (click)="rteStudent(true)">Yes</mat-option>
           <mat-option value="false" (click)="rteStudent(false)">No</mat-option>
         </mat-select>
@@ -22,6 +23,7 @@
       <mat-form-field class="example-full-width" appearance="outline" >
         <mat-label>ClassName</mat-label>
         <mat-select formControlName="className" disableOptionCentering required>
+          <mat-option value="">Select</mat-option>
           <mat-option value="all">All</mat-option>
           <mat-option value="nursary">Nursary Class</mat-option>
           <mat-option value="kg1">Kg 1 Class</mat-option>
@@ -41,6 +43,7 @@
 </form>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" [disabled]="!import.valid" (click)="exportIndividual(import.value)" >Import</button>
+    <button mat-raised-button color="primary" style="float: left;" [disabled]="!import.valid" (click)="exportIndividual(import.value)" >export</button>
+    <button mat-raised-button color="primary" style="float: right;" [disabled]="import.valid" (click)="exportTotalData(import.value)" >Total Export</button>
   </mat-card-actions>
 </mat-card>

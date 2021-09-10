@@ -111,5 +111,31 @@ export class ImportExportComponent implements OnInit {
     });
   }
 
+  exportTotalData(){
+    this._importExportService.export().subscribe((x)=>{
+      var blob = new Blob([x], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      if(window.navigator && window.navigator.msSaveOrOpenBlob){
+        window.navigator.msSaveOrOpenBlob(blob);
+        return ;
+      }
+      const data = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = data;
+      link.download = 'TotalData.xlsx';
+      link.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
+
+      setTimeout(function(){
+         window.URL.revokeObjectURL(data);
+         link.remove();
+      },100);
+      this.loaderSer.hideNgxSpinner();
+      this.loaderSer.showSucessSnakbar(" Total data Exported successfully ");
+     },(error)=>{
+       console.log(error);
+       this.loaderSer.hideNgxSpinner();
+       this.loaderSer.showFailureSnakbar("Total data Exported Failure ");
+     });
+  }
+
 
 }
