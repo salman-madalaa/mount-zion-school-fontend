@@ -27,7 +27,7 @@ export class UpdateStudentComponent implements OnInit {
   retrieveResonse: any;
   base64Data: any;
   selectedFile: File;
-  regId: number;
+  id: number;
 
 
   class: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -38,6 +38,7 @@ export class UpdateStudentComponent implements OnInit {
     public loaderSer: LoaderService, private dialogSer: ConfirmationDialogService) {
 
     this.student = this.formBuilder.group({
+      id: new FormControl('', []),
       registrationId: new FormControl('', []),
       dateOfAdmission: new FormControl('', []),
       samagraId: new FormControl('', []),
@@ -79,6 +80,7 @@ export class UpdateStudentComponent implements OnInit {
 
 loadData(){
   this.student.patchValue({
+    id:this.data.id,
     registrationId: this.data.registrationId,
     dateOfAdmission: this.data.dateOfAdmission,
     samagraId: this.data.samagraId,
@@ -111,7 +113,7 @@ loadData(){
   this.isRteStudent = this.data.rteStudent;
   this.isSiblings = this.data.siblings;
   this.student.setControl('siblingInformation', this.setExistsSiblingInformation(this.data.siblingInformation));
-  this.regId = this.data.registrationId;
+  this.id = this.data.id;
 
   this.imageSrc = 'data:image/jpeg;base64,' + this.data.studentImage.picByte;
 
@@ -166,7 +168,7 @@ loadData(){
 
   update(student) {
     this.loaderSer.showNgxSpinner();
-    this.service.updateStudent(student.registrationId, student).subscribe((data) => {
+    this.service.updateStudent(student.id, student).subscribe((data) => {
       this.dialogRef.close('success');
     }, (error) => {
       console.log(error);
@@ -248,7 +250,7 @@ loadData(){
       const image = new FormData();
       image.append('imageFile', this.selectedFile, this.selectedFile.name);
       this.loaderSer.showNgxSpinner();
-      this.service.updateImage(this.regId, image).subscribe((data) => {
+      this.service.updateImage(this.id, image).subscribe((data) => {
         this.retrieveResonse = data;
         this.base64Data = this.retrieveResonse.picByte;
         this.imageSrc = 'data:image/png;base64,' + this.base64Data;
@@ -270,7 +272,7 @@ loadData(){
     this.dialogSer.openConfirmationDialog(msg, title).afterClosed().subscribe(res => {
       if (res) {
         this.loaderSer.showNgxSpinner();
-        this.service.deleteImage(this.regId).subscribe((data) => {
+        this.service.deleteImage(this.id).subscribe((data) => {
           this.imageSrc = null;
           this.loaderSer.hideNgxSpinner();
           this.loaderSer.showSucessSnakbar("Image delete succesfully");
@@ -290,7 +292,7 @@ loadData(){
       this.selectedFile = event.target.files[0];
       const image = new FormData();
       image.append('imageFile', this.selectedFile, this.selectedFile.name);
-      this.service.uploadImage(this.regId, image).subscribe((data) => {
+      this.service.uploadImage(this.id, image).subscribe((data) => {
         this.retrieveResonse = data;
         this.base64Data = this.retrieveResonse.picByte;
         this.imageSrc = 'data:image/png;base64,' + this.base64Data;

@@ -147,7 +147,7 @@ td , th {
 }
 
 ::ng-deep .text-highlight {
-  background-color: #c7c9ca;
+  background-color:rgb(245, 245, 4);
 
 }
 .fa-file-excel{

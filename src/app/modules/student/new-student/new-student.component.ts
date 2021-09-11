@@ -96,7 +96,7 @@ export class NewStudentComponent implements OnInit {
     this.loaderSer.showNgxSpinner();
     this.service.Create(student).subscribe((data) => {
       if (this.selectedFile != null) {
-        this.onUpload(data.registrationId);
+        this.onUpload(data.id);
       } else {
         this.dialogRef.close('success');
         this.loaderSer.hideNgxSpinner();
@@ -160,11 +160,11 @@ export class NewStudentComponent implements OnInit {
   }
 
 
-  onUpload(registrationId) {
+  onUpload(id) {
     const image = new FormData();
     image.append('imageFile', this.selectedFile, this.selectedFile.name);
 
-    this.service.uploadImage(registrationId, image).subscribe((data) => {
+    this.service.uploadImage(id, image).subscribe((data) => {
       this.dialogRef.close('success');
       console.log("image uploaded succesfully");
       this.loaderSer.hideNgxSpinner();

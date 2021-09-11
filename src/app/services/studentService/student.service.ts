@@ -27,10 +27,10 @@ export class StudentService {
     return this.http.get(this.baseUrl + 'api/student/class/' + className);
   }
 
-  updateStudent(registrationId: number, ob): Observable<any> {
+  updateStudent(id: number, ob): Observable<any> {
     let body = JSON.stringify(ob);
    // let options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
-    return this.http.put(this.baseUrl + 'api/student/' + registrationId, ob);
+    return this.http.put(this.baseUrl + 'api/student/' + id, ob);
   }
 
   public delete(id: number) {
@@ -66,22 +66,22 @@ export class StudentService {
 
 
 
-uploadImage(regId,uploadImageData): Observable<any> {
-  return this.http.post(this.baseUrl + 'api/studentImage/' + regId + '/upload', uploadImageData);
+uploadImage(id,uploadImageData): Observable<any> {
+  return this.http.post(this.baseUrl + 'api/studentImage/' + id + '/upload', uploadImageData);
 }
 
-updateImage(regId,uploadImageData): Observable<any> {
-  return this.http.put(this.baseUrl + 'api/studentImage/' + regId + '/update', uploadImageData);
+updateImage(id,uploadImageData): Observable<any> {
+  return this.http.put(this.baseUrl + 'api/studentImage/' + id + '/update', uploadImageData);
 }
 
-deleteImage(regId): Observable<any> {
-  return this.http.delete(this.baseUrl + 'api/studentImage/' + regId + '/delete');
+deleteImage(id): Observable<any> {
+  return this.http.delete(this.baseUrl + 'api/studentImage/' + id + '/delete');
 }
 
 
-studentGetImage(regId): Observable<any> {
+studentGetImage(id): Observable<any> {
   let options = { headers: new HttpHeaders().set('Content-Type', 'multipart/form-data') };
-  return this.http.get(this.baseUrl + 'api/studentImage/get/' + regId ,options);
+  return this.http.get(this.baseUrl + 'api/studentImage/get/' + id ,options);
 }
 
 

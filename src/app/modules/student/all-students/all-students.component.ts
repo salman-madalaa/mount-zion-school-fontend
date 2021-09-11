@@ -22,7 +22,7 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
 
 
 
-  displayedColumns = ['registrationId','image' ,'dateOfAdmission', 'samagraId', 'firstName', 'lastName', 'fatherName', 'motherName', 'mobileNumber',
+  displayedColumns = ['registrationId','Image' ,'dateOfAdmission', 'samagraId', 'firstName', 'lastName', 'fatherName', 'motherName', 'mobileNumber',
     'presentAddress', 'permanentAddress', 'classToJoin', 'gender', 'dateOfBirth', 'marksOfIdentification', 'religion', 'caste', 'castId',
     'aadharNumber', 'bankAccountNumber', 'ifscCode', 'childHandicapped', 'fatherMotherExpired', 'siblings', 'rteStudent',
     // 'admissionFee', 'examFee', 'schoolFee', 'busFee', 'totalFee','admissionFeePaid', 'admissionFeeDue', 'examFeePaid', 'examFeeDue', 'busFeePaid', 'busFeeDue',
@@ -58,7 +58,7 @@ export class AllStudentsComponent implements OnInit, AfterViewInit {
     this. loadData();
 
   }
- 
+
   loadData(){
 
     this.dataSource.filterPredicate = function (data, filter: string): boolean {
